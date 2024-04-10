@@ -1,0 +1,7 @@
+/**
+ * Bundled by jsDelivr using Rollup v2.79.1 and Terser v5.19.2.
+ * Original file: /npm/@turf/rewind@5.1.5/main.es.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+import e from"../clone@5.1.5/_esm.js";import r from"../boolean-clockwise@5.1.5/_esm.js";import{featureEach as t,geomEach as o}from"../meta@5.2.0/_esm.js";import{getCoords as n}from"../invariant@5.2.0/_esm.js";import{isObject as i,featureCollection as u}from"../helpers@5.1.5/_esm.js";function a(r,n){if(!i(n=n||{}))throw new Error("options is invalid");var a=n.reverse||!1,f=n.mutate||!1;if(!r)throw new Error("<geojson> is required");if("boolean"!=typeof a)throw new Error("<reverse> must be a boolean");if("boolean"!=typeof f)throw new Error("<mutate> must be a boolean");!1===f&&(r=e(r));var c=[];switch(r.type){case"GeometryCollection":return o(r,(function(e){s(e,a)})),r;case"FeatureCollection":return t(r,(function(e){t(s(e,a),(function(e){c.push(e)}))})),u(c)}return s(r,a)}function s(e,r){switch("Feature"===e.type?e.geometry.type:e.type){case"GeometryCollection":return o(e,(function(e){s(e,r)})),e;case"LineString":return f(n(e),r),e;case"Polygon":return c(n(e),r),e;case"MultiLineString":return n(e).forEach((function(e){f(e,r)})),e;case"MultiPolygon":return n(e).forEach((function(e){c(e,r)})),e;case"Point":case"MultiPoint":return e}}function f(e,t){r(e)===t&&e.reverse()}function c(e,t){r(e[0])!==t&&e[0].reverse();for(var o=1;o<e.length;o++)r(e[o])===t&&e[o].reverse()}export{a as default};

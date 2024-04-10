@@ -21,48 +21,74 @@
 import L from 'npm:leaflet';
 import "npm:leaflet.markercluster";
 import "npm:leaflet.heat";
+import * as d3 from "npm:d3";
+import extent from "npm:d3";
 // import "npm:leaflet.featuregroup.subgroup";
 const data = FileAttachment("./data/combined_data.csv").csv();
+const new_place_data = FileAttachment("./data/new_places.csv").csv();
 
 const start = view(Inputs.date({label: "Start", value: "2022-06-21"}));
 const end = view(Inputs.date({label: "End", value: "2022-07-21"}));
 
-// const start1 = Inputs.date({label: "Start", value: "2022-06-21"});
-// const end1 = Inputs.date({label: "End", value: "2022-08-21"});
-
-
 
 ```
 
+
+```js
+
+// Haversine公式计算地球上两点间的距离
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // 地球半径，以米为单位
+    const φ1 = lat1 * Math.PI / 180; // φ, λ为纬度、经度的弧度
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // 返回以米为单位的距离
+}
+
+
+function isNewPlace(place, existingPlaces, threshold=50) {
+    return !existingPlaces.some(existingPlace => {
+        const distance = getDistance(
+            place.latitude, place.longitude,
+            existingPlace.latitude, existingPlace.longitude
+        );
+        return distance <= threshold;
+    });
+}
+
+```
+
+
+
+<!-- Function for all data visualization -->
 ```js
 
 function filterDataByDateRange(data, startDate, endDate) {
-  // 转换日期字符串为 Date 对象
+  // Convert a date string to a Date object
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  // 过滤 data 中的对象，检查它们的时间戳是否在给定的区间内
+  // Filter the objects in data and check if their timestamps are in the given interval
   const filteredData = data.filter(d => {
-    // 将每行数据的时间戳字符串转换为 Date 对象
+    // Converts the timestamp string of each row of data to a Date object.
     const startTimestamp = new Date(d.start_timestamp);
     const endTimestamp = new Date(d.end_timestamp);
 
-    // 检查时间戳是否至少部分位于区间内
-    // 记录需要在结束日期之前开始，在开始日期之后结束
+    // Check if the timestamp lies at least partially within the interval
     return startTimestamp < end && endTimestamp > start;
   });
 
   return filteredData;
 }
-```
-
-```js
-var filteredData = filterDataByDateRange(data, start, end);
-
-```
 
 
-```js
 function visualizeGPSData(data) {
   let Places = data.map(d => {
     return [+d['latitude'], +d['longitude']];
@@ -86,8 +112,8 @@ function visualizeGPSData(data) {
     detectRetina: true
   }).addTo(map);
 
-  // Add a heat layer to the map
-  var heat = L.heatLayer(Places, {radius: 15, blur: 15}).addTo(map);
+  // // Add a heat layer to the map
+  // var heat = L.heatLayer(Places, {radius: 20, blur: 10}).addTo(map);
 
   // Initialize marker clustering
   var markers = L.markerClusterGroup({
@@ -112,9 +138,93 @@ function visualizeGPSData(data) {
 }
 ```
 
+```js
+var filteredData = filterDataByDateRange(data, start, end);
+
+```
+
+```js
+data.forEach(d => d.start_timestamp = new Date(d.start_timestamp)); 
+
+const latestDate = new Date(Math.max(...data.map(d => d.start_timestamp.getTime())));
+const startLastWeek = new Date(latestDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+const lastWeekData = data.filter(d => d.start_timestamp > startLastWeek);
+const beforeLastWeekData = data.filter(d => d.start_timestamp <= startLastWeek);
+
+const newPlaces = lastWeekData.filter(place => isNewPlace(place, beforeLastWeekData));
+
+const numNewPlaces = newPlaces.length;
+
+
+```
 
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => visualizeGPSData(filteredData))}
   </div>
 </div>
+
+```js
+
+display(numNewPlaces);
+display(new_place_data);
+console.log(new_place_data);
+
+```
+
+```js
+const color = Plot.scale({
+  color: {
+    type: "categorical",
+    domain: d3.groupSort(new_place_data, (D) => -D.length, (d) => d.state).filter((d) => d !== "Other"),
+    unknown: "var(--theme-foreground-muted)"
+  }
+});
+```
+
+```js
+
+// Plot.groupY(
+//   {y: "count"}, 
+//   {x: "date", fill: "date"},
+//   new_place_data.map(d => ({date: d.date})));
+
+
+function newPlaceChart(width,newPlaceData) {
+  return Plot.plot({
+    title: "new Place over the years",
+    width,
+    height: 300 ,
+    y: {grid: true, label: "Place"},
+    color: {...color, legend: true},
+    marks: [
+      Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: "Week", tip: true})),
+      Plot.ruleY([0])
+    ]
+  });
+}
+
+  
+
+```
+
+
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => visualizeGPSData(newPlaces))}
+  </div>
+</div>
+
+
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => newPlaceChart(width,new_place_data))}
+  </div>
+</div>
+    
+
+
+  
