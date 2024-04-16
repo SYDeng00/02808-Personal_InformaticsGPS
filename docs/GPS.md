@@ -165,13 +165,13 @@ const numNewPlaces = newPlaces.length;
   </div>
 </div>
 
-```js
+<!-- ```js
 
 display(numNewPlaces);
 display(new_place_data);
 console.log(new_place_data);
 
-```
+``` -->
 
 ```js
 const color = Plot.scale({
@@ -185,10 +185,7 @@ const color = Plot.scale({
 
 ```js
 
-// Plot.groupY(
-//   {y: "count"}, 
-//   {x: "date", fill: "date"},
-//   new_place_data.map(d => ({date: d.date})));
+
 
 
 function newPlaceChart(width,newPlaceData) {
@@ -199,7 +196,7 @@ function newPlaceChart(width,newPlaceData) {
     y: {grid: true, label: "Place"},
     color: {...color, legend: true},
     marks: [
-      Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: "Week", tip: true})),
+      Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: timePeriod, tip: true})),
       Plot.ruleY([0])
     ]
   });
@@ -209,7 +206,7 @@ function newPlaceChart(width,newPlaceData) {
 
 ```
 
-
+## Last week 'new place' Visualization
 
 <div class="grid grid-cols-1">
   <div class="card">
@@ -217,7 +214,19 @@ function newPlaceChart(width,newPlaceData) {
   </div>
 </div>
 
-
+```js
+const timePeriod = view(
+  Inputs.select(
+    new Map([
+      ["Year", "year"],
+      ["Month", "month"],
+      ["Week", "week"],
+      ["Day", "day"]
+    ]),
+    {value: "week", label: "Time Period"}
+  )
+);
+```
 
 <div class="grid grid-cols-1">
   <div class="card">
