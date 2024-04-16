@@ -190,11 +190,11 @@ const color = Plot.scale({
 
 function newPlaceChart(width,newPlaceData) {
   return Plot.plot({
-    title: "new Place over the years",
+    title: "Visited places in 2022",
     width,
     height: 300 ,
-    y: {grid: true, label: "Place"},
-    color: {...color, legend: true},
+    y: {grid: true, label: "Places"},
+    color: {...color, legend: false},
     marks: [
       Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: timePeriod, tip: true})),
       Plot.ruleY([0])
