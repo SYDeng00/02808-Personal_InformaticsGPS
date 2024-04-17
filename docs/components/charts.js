@@ -128,3 +128,17 @@ export function isNewPlace(place, existingPlaces, threshold=50) {
       return distance <= threshold;
   });
 }
+
+export function newPlace_lastWeek(data){
+  data.forEach(d => d.start_timestamp = new Date(d.start_timestamp)); 
+
+  const latestDate = new Date(Math.max(...data.map(d => d.start_timestamp.getTime())));
+  const startLastWeek = new Date(latestDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  const lastWeekData = data.filter(d => d.start_timestamp > startLastWeek);
+  const beforeLastWeekData = data.filter(d => d.start_timestamp <= startLastWeek);
+
+  const newPlaces = lastWeekData.filter(place => isNewPlace(place, beforeLastWeekData));
+  return newPlaces
+
+}
