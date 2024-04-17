@@ -29,27 +29,43 @@ import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, is
 ```js
 const data = await FileAttachment("./data/combined_data.csv").csv();
 const new_place_data = await FileAttachment("./data/new_places.csv").csv();
-
 const start = view(Inputs.date({label: "Start", value: "2022-06-21"}));
 const end = view(Inputs.date({label: "End", value: "2022-07-21"}));
+const Type = view(
+  Inputs.select(
+    new Map([
+      ["Selected Data visualization", "select"],
+      ["Last Week visualization", "last"]
+    ]),
+    {value: "select", label: "Time Period"}
+  )
+);
 
 ```
 
 
 ```js
-var filteredData = filterDataByDateRange(data, start, end);
+var data_display = data;
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
 const newPlaces = newPlace_lastWeek(data);
 const numNewPlaces = newPlaces.length;
 var average_count = calculateAveragePlacesVisited(new_place_data)
+if(Type == "select"){
+  data_display = filterDataByDateRange(data, start, end);
+
+} else {
+   data_display = newPlaces;
+}
 ```
 
 
-<div class="grid grid-cols-1">
+
+<!-- <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => visualizeGPSData(filteredData, heatMap))}
+    ${resize((width) => visualizeGPSData(data_display, heatMap))}
   </div>
-</div>
+
+</div> -->
 
 
 
@@ -58,9 +74,7 @@ var average_count = calculateAveragePlacesVisited(new_place_data)
 
 
 <div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => visualizeGPSData(newPlaces, heatMap))}
-  </div>
+
 </div>
 
 ```js
@@ -85,23 +99,29 @@ const timePeriod = view(
     
 
 
-<div class="grid grid-cols-3">
-  <div class="card">
-    <h2>New places visited last week</h2>
-    <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
+<div class="grid grid-cols-4">
+  <div class="card grid-colspan-2 grid-rowspan-3">
+    <div class="card">
+      ${resize((width) => visualizeGPSData(data_display, heatMap))}
+    </div>
   </div>
-
-  <div class="card">
-    <h2>Average new places visited per week</h2>
-    <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
+  
+  <div class="card grid-colspan-2">
+      <h2>New places visited last week</h2>
+      <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
+    </div>
+    <div class="card grid-colspan-2">
+      <h2>New Place visited average month</h2>
+      <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
+    </div>
+    <div class="card grid-colspan-2">
+      <h2>New Place visited average week</h2>
+      <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
+    </div>
   </div>
-
-  <div class="card">
-    <h2>Average new places visited per month</h2>
-    <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
   </div>
-
 </div>
+
 
 ```js
 
