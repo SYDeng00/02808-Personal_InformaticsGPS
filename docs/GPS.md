@@ -89,7 +89,7 @@ function filterDataByDateRange(data, startDate, endDate) {
 }
 
 
-function visualizeGPSData(data,heatMap, cluster) {
+function visualizeGPSData(data,heatMap) {
   let Places = data.map(d => {
     return [+d['latitude'], +d['longitude']];
   });
@@ -124,7 +124,7 @@ function visualizeGPSData(data,heatMap, cluster) {
   }
 
     
-  if(cluster){  // Initialize marker clustering
+
   var markers = L.markerClusterGroup({
     maxClusterRadius: 20, 
     iconCreateFunction: function(cluster) {
@@ -144,14 +144,13 @@ function visualizeGPSData(data,heatMap, cluster) {
   map.addLayer(markers);
   // Add the clustering layer to the map
   return div;
-}}
+}
 
 ```
 
 ```js
 var filteredData = filterDataByDateRange(data, start, end);
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
-var  cluster = view(Inputs.toggle({label: "Cluster", value: true}));
 
 ```
 
@@ -173,7 +172,7 @@ const numNewPlaces = newPlaces.length;
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => visualizeGPSData(filteredData, heatMap, cluster))}
+    ${resize((width) => visualizeGPSData(filteredData, heatMap))}
   </div>
 </div>
 
@@ -202,7 +201,7 @@ const color = Plot.scale({
 
 function newPlaceChart(width,newPlaceData) {
   return Plot.plot({
-    title: "Visited places in 2022",
+    title: "New Places Visited  in 2022",
     width,
     height: 300 ,
     y: {grid: true, label: "Places"},
@@ -224,7 +223,7 @@ function newPlaceChart(width,newPlaceData) {
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => visualizeGPSData(newPlaces, heatMap, cluster))}
+    ${resize((width) => visualizeGPSData(newPlaces, heatMap))}
   </div>
 </div>
 
