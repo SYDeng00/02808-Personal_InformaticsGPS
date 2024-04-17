@@ -89,7 +89,7 @@ function filterDataByDateRange(data, startDate, endDate) {
 }
 
 
-function visualizeGPSData(data) {
+function visualizeGPSData(data,heatMap, cluster) {
   let Places = data.map(d => {
     return [+d['latitude'], +d['longitude']];
   });
@@ -113,9 +113,18 @@ function visualizeGPSData(data) {
   }).addTo(map);
 
   // // Add a heat layer to the map
-  // var heat = L.heatLayer(Places, {radius: 20, blur: 10}).addTo(map);
+  if (heatMap) {
+    let heat = L.heatLayer(Places, { 
+                radius: 25,  
+                blur:30,
+                maxZoom: 14,
+                max: 0.5  
+              }).addTo(map);
 
-  // Initialize marker clustering
+  }
+
+    
+  if(cluster){  // Initialize marker clustering
   var markers = L.markerClusterGroup({
     maxClusterRadius: 20, 
     iconCreateFunction: function(cluster) {
@@ -135,11 +144,14 @@ function visualizeGPSData(data) {
   map.addLayer(markers);
   // Add the clustering layer to the map
   return div;
-}
+}}
+
 ```
 
 ```js
 var filteredData = filterDataByDateRange(data, start, end);
+var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
+var  cluster = view(Inputs.toggle({label: "Cluster", value: true}));
 
 ```
 
@@ -161,7 +173,7 @@ const numNewPlaces = newPlaces.length;
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => visualizeGPSData(filteredData))}
+    ${resize((width) => visualizeGPSData(filteredData, heatMap, cluster))}
   </div>
 </div>
 
@@ -208,9 +220,11 @@ function newPlaceChart(width,newPlaceData) {
 
 ## Last week 'new place' Visualization
 
+
+
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => visualizeGPSData(newPlaces))}
+    ${resize((width) => visualizeGPSData(newPlaces, heatMap, cluster))}
   </div>
 </div>
 
@@ -236,4 +250,10 @@ const timePeriod = view(
     
 
 
-  
+<div class="grid grid-cols-1">
+<div class="card">
+  <h2>New Place visited last week </h2>
+  <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
+</div>
+
+</div>
