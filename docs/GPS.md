@@ -100,39 +100,34 @@ const timePeriod = view(
 </div>
     
 
-
 <div class="grid grid-cols-4">
   <div class="card grid-colspan-2 grid-rowspan-3">
-    <div class="card">
       ${resize((width) => visualizeGPSData(data_display, heatMap))}
-    </div>
   </div>
-  
-  <div class="card grid-colspan-2">
+
+  <div class="card grid-colspan-6">
       <h2>New places visited last week*</h2>
       <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
     </div>
-    <div class="card grid-colspan-2">
-      <h2>Average new places visited per week</h2>
-      <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
+  <div class="card grid-colspan-6">
+    <h2>Average new places visited per week</h2>
+    <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
     </div>
-    <div class="card grid-colspan-2">
+    <div class="card grid-colspan-6">
       <h2>Average new places visited per month</h2>
       <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
     </div>
-      <div class="card grid-colspan-2">
+    <div class="card grid-colspan-6">
     <h2>Time spent in new places last week*</h2>
     <span class="big">${formatDuration(timeSpentLast7Days(duration_data))}</span>
     </div>
-    <div class="card grid-colspan-2">
+    <div class="card grid-colspan-6">
       <h2>Average time spent in new places per week</h2>
       <span class="big">${formatDuration(averageTimePerWeek(duration_data))}</span>
     </div>
-    <div class="card grid-colspan-2">
+    <div class="card grid-colspan-6">
       <h2>Average time spent in new places per month</h2>
       <span class="big">${formatDuration(averageTimePerMonth(duration_data))}</span>
-    </div>
-  </div>
   </div>
 </div>
 <p>* Here, "last week" means last 7 days in the given dataset.</p>
