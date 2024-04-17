@@ -91,7 +91,7 @@ export function newPlaceChart(width,newPlaceData,timePeriod) {
   });
 
   return Plot.plot({
-    title: "New Places Visited  in 2022",
+    title: "New places visited in 2022",
     width,
     height: 300 ,
     y: {grid: true, label: "Places"},

@@ -86,7 +86,7 @@ const timePeriod = view(
 
 <div class="grid grid-cols-1">
   <div class="card">
-    <h2>New Place visited last week </h2>
+    <h2>New places visited last week </h2>
     <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
   </div>
 </div>
