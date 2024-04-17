@@ -22,7 +22,7 @@ export function visualizeGPSData(data,heatMap) {
   document.body.appendChild(div);
 
   // Initialize the map
-  var map = L.map(div).setView([xCenter, yCenter], 10);
+  var map = L.map(div).setView([xCenter, yCenter], 6);
 
   // Add OSM tile layer to the map
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -141,4 +141,39 @@ export function newPlace_lastWeek(data){
   const newPlaces = lastWeekData.filter(place => isNewPlace(place, beforeLastWeekData));
   return newPlaces
 
+}
+
+
+
+export function calculateAveragePlacesVisited(new_place_data) {
+
+  new_place_data.forEach(d => {
+      d.date = new Date(d.start_timestamp);
+  });
+
+
+  const dateExtent = d3.extent(new_place_data, d => d.date);
+  const startDate = dateExtent[0];
+  const endDate = dateExtent[1];
+
+
+  const months = d3.timeMonth.range(d3.timeMonth.floor(startDate), d3.timeMonth.ceil(endDate));
+  const weeks = d3.timeWeek.range(d3.timeWeek.floor(startDate), d3.timeWeek.ceil(endDate));
+
+
+  const monthGroups = d3.rollups(new_place_data, v => v.length, d => d3.timeMonth.floor(d.date).toISOString().slice(0, 7));
+  const weekGroups = d3.rollups(new_place_data, v => v.length, d => d3.timeWeek.floor(d.date).toISOString().slice(0, 10));
+
+
+  const totalVisitsPerMonth = monthGroups.reduce((acc, curr) => acc + curr[1], 0);
+  const totalVisitsPerWeek = weekGroups.reduce((acc, curr) => acc + curr[1], 0);
+
+
+  const averagePerMonth = totalVisitsPerMonth / months.length;
+  const averagePerWeek = totalVisitsPerWeek / weeks.length;
+
+  return {
+      averagePerMonth,
+      averagePerWeek
+  };
 }

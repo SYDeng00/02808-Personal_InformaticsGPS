@@ -22,7 +22,7 @@ toc: false
 </style>
 
 ```js
-import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek} from "./components/charts.js";
+import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited} from "./components/charts.js";
 
 
 ```
@@ -41,6 +41,7 @@ var filteredData = filterDataByDateRange(data, start, end);
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
 const newPlaces = newPlace_lastWeek(data);
 const numNewPlaces = newPlaces.length;
+var average_count = calculateAveragePlacesVisited(new_place_data)
 ```
 
 
@@ -84,9 +85,25 @@ const timePeriod = view(
     
 
 
-<div class="grid grid-cols-1">
+<div class="grid grid-cols-3">
   <div class="card">
     <h2>New places visited last week </h2>
     <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
   </div>
+
+  <div class="card">
+    <h2>New Place visited average week </h2>
+    <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
+  </div>
+
+   <div class="card">
+    <h2>New Place visited average week </h2>
+    <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
+  </div>
+
 </div>
+
+```js
+
+
+```
