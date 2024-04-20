@@ -27,7 +27,6 @@ toc: false
 ```js
 import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited, calculateTotalDuration} from "./components/charts.js";
 
-
 ```
 
 # WorldViewer
@@ -51,7 +50,6 @@ const Type = view(
 
 ```
 
-
 ```js
 var data_display = data;
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
@@ -68,33 +66,14 @@ if(Type == "select"){
 ```
 
 
-<div class="grid grid-cols-1">
+<!-- <div class="grid grid-cols-1">
 
 </div>
-
-```js
-const timePeriod = view(
-  Inputs.select(
-    new Map([
-      ["Year", "year"],
-      ["Month", "month"],
-      ["Week", "week"],
-      ["Day", "day"]
-    ]),
-    {value: "week", label: "Time Period"}
-  )
-);
-```
+ -->
 
 
 
 
-
-<div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
-  </div>
-</div>
     
 
 <div class="grid grid-cols-3">
@@ -139,5 +118,22 @@ const timePeriod = view(
 </div>
 
 
+```js
+const timePeriod = view(
+  Inputs.select(
+    new Map([
+      ["Year", "year"],
+      ["Month", "month"],
+      ["Week", "week"],
+      ["Day", "day"]
+    ]),
+    {value: "week", label: "Time Period"}
+  )
+);
+```
 
-
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
+  </div>
+</div>
