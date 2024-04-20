@@ -19,13 +19,19 @@ toc: false
     font-weight: bold;
     text-shadow: 0 0 3px #fff; /* White text shadow */
   }
+
 </style>
+
+
 
 ```js
 import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited, calculateTotalDuration} from "./components/charts.js";
 
 
 ```
+
+# WorldViewer
+
 ```js
 const data = await FileAttachment("./data/combined_data.csv").csv();
 const new_place_data = await FileAttachment("./data/new_places.csv").csv();
@@ -80,6 +86,10 @@ const timePeriod = view(
 );
 ```
 
+
+
+
+
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
@@ -87,40 +97,47 @@ const timePeriod = view(
 </div>
     
 
-<div class="grid grid-cols-4">
+<div class="grid grid-cols-3">
   <div class="card grid-colspan-2 grid-rowspan-3">
       ${resize((width) => visualizeGPSData(data_display, heatMap))}
   </div>
 
-  <div class="card grid-colspan-6">
-      <h2>New places visited last week*</h2>
+  <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="flex: 1; text-align: center;">
+      <h2>New places visited last week</h2>
       <span class="big">${numnewPlaces_LW.toLocaleString("en-US")}</span>
     </div>
-  <div class="card grid-colspan-6">
-    <h2>Average new places visited per week</h2>
-    <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
+    <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
+    <div style="flex: 1; text-align: center;">
+      <h2>Average new places visited per week</h2>
+      <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
     </div>
-    <div class="card grid-colspan-6">
-      <h2>Average new places visited per month</h2>
-      <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
-    </div>
-    <div class="card grid-colspan-6">
-    <h2>Time spent in new places last week (Hour)</h2>
-    <span class="big">${average_duration_LW.toLocaleString("en-US")}</span>
-    </div>
-    <div class="card grid-colspan-6">
+  </div>
+  <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="flex: 1; text-align: center;">
+      <h2>Time spent in new places last week (Hour)</h2>
+      <span class="big">${average_duration_LW.toLocaleString("en-US")}</span>
+      </div>
+      <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
+      <div style="flex: 1; text-align: center;">
       <h2>Average time spent in new places per week</h2>
       <span class="big">${average_count.average_durationPerWeek.toLocaleString("en-US")}</span>
     </div>
-    <div class="card grid-colspan-6">
+  </div>
+  <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="flex: 1; text-align: center;">
       <h2>Average time spent in new places per month</h2>
       <span class="big">${average_count.average_durationPerMonth.toLocaleString("en-US")}</span>
+    </div>
+    <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
+    <div style="flex: 1; text-align: center;">
+      <h2>Average new places visited per month</h2>
+      <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
+    </div>
   </div>
+
 </div>
-<p>* Here, "last week" means last 7 days in the given dataset.</p>
-
-```js
 
 
-```
+
 
