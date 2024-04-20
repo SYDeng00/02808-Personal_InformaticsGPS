@@ -151,32 +151,78 @@ export function calculateAveragePlacesVisited(new_place_data) {
       d.date = new Date(d.start_timestamp);
   });
 
-
-  const dateExtent = d3.extent(new_place_data, d => d.date);
-  const startDate = dateExtent[0];
-  const endDate = dateExtent[1];
-
-
-  const months = d3.timeMonth.range(d3.timeMonth.floor(startDate), d3.timeMonth.ceil(endDate));
-  const weeks = d3.timeWeek.range(d3.timeWeek.floor(startDate), d3.timeWeek.ceil(endDate));
+  new_place_data.forEach(item => {
+    const start = new Date(item.start_timestamp);
+    const end = new Date(item.end_timestamp);
+    item.duration = (end - start) / 3600000; // 将持续时间存储在数据项中，单位为小时
+});
 
 
-  const monthGroups = d3.rollups(new_place_data, v => v.length, d => d3.timeMonth.floor(d.date).toISOString().slice(0, 7));
-  const weekGroups = d3.rollups(new_place_data, v => v.length, d => d3.timeWeek.floor(d.date).toISOString().slice(0, 10));
+    // 数据处理
+    new_place_data.forEach(d => d.date = new Date(d.start_timestamp));
+    const dateExtent = d3.extent(new_place_data, d => d.date);
+    const startDate = dateExtent[0];
+    const endDate = dateExtent[1];
+    const months = d3.timeMonth.range(d3.timeMonth.floor(startDate), d3.timeMonth.ceil(endDate));
+    const weeks = d3.timeWeek.range(d3.timeWeek.floor(startDate), d3.timeWeek.ceil(endDate));
 
+    const monthGroups = d3.rollups(new_place_data, 
+        v => ({ count: v.length, totalDuration: d3.sum(v, d => d.duration) }), 
+        d => d3.timeMonth.floor(d.date).toISOString().slice(0, 7));
+    const weekGroups = d3.rollups(new_place_data, 
+        v => ({ count: v.length, totalDuration: d3.sum(v, d => d.duration) }), 
+        d => d3.timeWeek.floor(d.date).toISOString().slice(0, 10));
 
-  const totalVisitsPerMonth = monthGroups.reduce((acc, curr) => acc + curr[1], 0);
-  const totalVisitsPerWeek = weekGroups.reduce((acc, curr) => acc + curr[1], 0);
+    const averagePerMonth = monthGroups.reduce((acc, curr) => acc + curr[1].count, 0) / months.length;
+    const averagePerWeek = weekGroups.reduce((acc, curr) => acc + curr[1].count, 0) / weeks.length;
+    const average_durationPerMonth = monthGroups.reduce((acc, curr) => acc + curr[1].totalDuration, 0) / months.length;
+    const average_durationPerWeek = weekGroups.reduce((acc, curr) => acc + curr[1].totalDuration, 0) / weeks.length;
 
-
-  const averagePerMonth = totalVisitsPerMonth / months.length;
-  const averagePerWeek = totalVisitsPerWeek / weeks.length;
-
-  return {
-      averagePerMonth,
-      averagePerWeek
-  };
+    return {
+        averagePerMonth,
+        averagePerWeek,
+        average_durationPerMonth,
+        average_durationPerWeek
+    };
 }
+
+export function calculateTotalDuration(data) {
+  let totalDuration = 0; 
+
+  data.forEach(item => {
+      const start = new Date(item.start_timestamp);
+      const end = new Date(item.end_timestamp);
+      const duration = (end - start) / 3600000; // Hour
+      totalDuration += duration; 
+  });
+
+  return totalDuration;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function parseTimestamp(timestamp) {
   const [date, time] = timestamp.split('T');

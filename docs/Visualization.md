@@ -1,70 +1,36 @@
 # Visualization
 
 
-```js
-const data = FileAttachment("./data/process_gps_data.csv").csv();
-```
 
 ```js
-let Places = data.map(d => {
-  return [
-    +d['latitude'],
-    +d['longitude']
-  ];
-});
+import * as d3 from "npm:d3";
 
-let xCenter = d3.mean(d3.extent(data.map(d => d['latitude'])));
-let yCenter = d3.mean(d3.extent(data.map(d => d['longitude'])));
-```
+const data = [10, 15, 20, 25, 30]; // 示例数据
+const svg = select("svg"); // 选择上面创建的 SVG 容器
+const width = +svg.attr("width");
+const height = +svg.attr("height");
+const barWidth = width / data.length; // 计算柱状的宽度
 
+// 创建y轴的比例尺
+const yScale = d3.scaleLinear()
+  .domain([0, d3.max(data)])
+  .range([height, 0]);
 
-```js
-import {require} from "npm:d3-require";
-```
-
-```js
-
-let heat = require('leaflet.heat@0.2.0/dist/leaflet-heat.js')
-  .catch(() => window.L.heatLayer)
-
-// let markerCluster = require('leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js').catch(() => window.L.MarkerClusterGroup)
-
-
-
-
-
-```
-
-
-```js
-function createMap(width, xCenter, yCenter, Places) {
-  // Create a div for the map
-  let container = document.createElement('div');
-  container.style.width = `${width}px`;
-  container.style.height = `${width / 1.6}px`;
-
-  // Append the container to an existing element, adjust the selector as needed
-  document.getElementById('visualization').appendChild(container);
-
-  // Create the Leaflet map in the container
-  let map = L.map(container).setView([xCenter, yCenter], 11);
-  
-  // Add OpenStreetMap layer
-//   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
-//   }).addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  detectRetina: true
-}).addTo(map);
-
-  // Add heat layer with the provided places data
-
-  heat(Places, {radius: 15}).addTo(map);   
-  // Define heatLayerPromise
-  // Optional: return the map if you need to use it later
-  return map;
-}
-
-
-createMap(width, xCenter, yCenter, Places);
+// 绘制柱状图
+d3.selectAll("rect")
+  .data(data)
+  .enter().append("rect")
+    .attr("x", (d, i) => i * barWidth)
+    .attr("y", d => yScale(d))
+    .attr("width", barWidth - 1)
+    .attr("height", d => height - yScale(d))
+    .attr("fill", "steelblue")
+    .on("click", (event, d) => {
+      console.log(`Clicked on bar with value ${d}`);
+      // 这里可以添加更多点击后的动作，比如更新详情面板、改变颜色等
+      select(event.target).attr("fill", "tomato"); // 点击后改变颜色
+    });
 
 ```
+
+<svg width="400" height="300" style="border: 1px solid #ccc;"></svg>

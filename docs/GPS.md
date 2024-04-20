@@ -22,7 +22,7 @@ toc: false
 </style>
 
 ```js
-import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited, parseTimestamp, timeSpentLast7Days, averageTimePerWeek, averageTimePerMonth, formatDuration} from "./components/charts.js";
+import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited, calculateTotalDuration} from "./components/charts.js";
 
 
 ```
@@ -49,30 +49,17 @@ const Type = view(
 ```js
 var data_display = data;
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
-const newPlaces = newPlace_lastWeek(data);
-const numNewPlaces = newPlaces.length;
-var average_count = calculateAveragePlacesVisited(new_place_data)
+const newPlaces_LW = newPlace_lastWeek(data);
+const numnewPlaces_LW = newPlaces_LW.length;
+var average_count = calculateAveragePlacesVisited(new_place_data);
+var average_duration_LW = calculateTotalDuration(newPlaces_LW);
 if(Type == "select"){
   data_display = filterDataByDateRange(data, start, end);
 
 } else {
-   data_display = newPlaces;
+   data_display = newPlaces_LW;
 }
 ```
-
-
-
-<!-- <div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => visualizeGPSData(data_display, heatMap))}
-  </div>
-
-</div> -->
-
-
-
-## Last week 'new place' Visualization
-
 
 
 <div class="grid grid-cols-1">
@@ -107,7 +94,7 @@ const timePeriod = view(
 
   <div class="card grid-colspan-6">
       <h2>New places visited last week*</h2>
-      <span class="big">${numNewPlaces.toLocaleString("en-US")}</span>
+      <span class="big">${numnewPlaces_LW.toLocaleString("en-US")}</span>
     </div>
   <div class="card grid-colspan-6">
     <h2>Average new places visited per week</h2>
@@ -118,16 +105,16 @@ const timePeriod = view(
       <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
     </div>
     <div class="card grid-colspan-6">
-    <h2>Time spent in new places last week*</h2>
-    <span class="big">${formatDuration(timeSpentLast7Days(duration_data))}</span>
+    <h2>Time spent in new places last week (Hour)</h2>
+    <span class="big">${average_duration_LW.toLocaleString("en-US")}</span>
     </div>
     <div class="card grid-colspan-6">
       <h2>Average time spent in new places per week</h2>
-      <span class="big">${formatDuration(averageTimePerWeek(duration_data))}</span>
+      <span class="big">${average_count.average_durationPerWeek.toLocaleString("en-US")}</span>
     </div>
     <div class="card grid-colspan-6">
       <h2>Average time spent in new places per month</h2>
-      <span class="big">${formatDuration(averageTimePerMonth(duration_data))}</span>
+      <span class="big">${average_count.average_durationPerMonth.toLocaleString("en-US")}</span>
   </div>
 </div>
 <p>* Here, "last week" means last 7 days in the given dataset.</p>
@@ -136,3 +123,4 @@ const timePeriod = view(
 
 
 ```
+
