@@ -34,7 +34,10 @@ import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, is
 ```js
 const data = await FileAttachment("./data/combined_data.csv").csv();
 const new_place_data = await FileAttachment("./data/new_places.csv").csv();
-const  frequency_data = await FileAttachment("./data/processed_locations.csv").csv({typed: true});;
+const  frequency_data = await FileAttachment("./data/processed_locations.csv").csv();
+const  duration_data = await FileAttachment("./data/processed_duration.csv").csv();
+
+
 
 
 const start = view(Inputs.date({label: "Start", value: "2022-06-21"}));
@@ -44,12 +47,17 @@ const Type = view(
     new Map([
       ["Select Data visualization", "select"],
       ["Last Week visualization", "last"],
-      ["Most visited 10 places", "frequency"]
+      ["Most visited 10 places", "frequency"],
+      ["Most duration 10 places", "duration"]
     ]),
     {value: "select", label: "Time Period"}
   )
 );
 
+```
+
+```js
+display(duration_data);
 ```
 
 ```js
@@ -65,8 +73,10 @@ if(Type == "select"){
 }else if (Type == "frequency") {
   data_display = frequency_data;
 }
-else {
+else if(Type == "last"){
    data_display = newPlaces_LW;
+} else{
+  data_display = duration_data;
 }
 ```
 
