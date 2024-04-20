@@ -25,7 +25,7 @@ toc: false
 
 
 ```js
-import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAveragePlacesVisited, calculateTotalDuration} from "./components/charts.js";
+import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAverage, calculateTotalDuration} from "./components/charts.js";
 
 ```
 
@@ -34,15 +34,17 @@ import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, is
 ```js
 const data = await FileAttachment("./data/combined_data.csv").csv();
 const new_place_data = await FileAttachment("./data/new_places.csv").csv();
-const duration_data = await FileAttachment("./data/combined_data_durations.csv").csv();
+const  frequency_data = await FileAttachment("./data/processed_locations.csv").csv({typed: true});;
+
 
 const start = view(Inputs.date({label: "Start", value: "2022-06-21"}));
 const end = view(Inputs.date({label: "End", value: "2022-07-21"}));
 const Type = view(
   Inputs.select(
     new Map([
-      ["Selected Data visualization", "select"],
-      ["Last Week visualization", "last"]
+      ["Select Data visualization", "select"],
+      ["Last Week visualization", "last"],
+      ["Most visited 10 places", "frequency"]
     ]),
     {value: "select", label: "Time Period"}
   )
@@ -55,21 +57,19 @@ var data_display = data;
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
 const newPlaces_LW = newPlace_lastWeek(data);
 const numnewPlaces_LW = newPlaces_LW.length;
-var average_count = calculateAveragePlacesVisited(new_place_data);
+var average_count = calculateAverage(new_place_data);
 var average_duration_LW = calculateTotalDuration(newPlaces_LW);
 if(Type == "select"){
   data_display = filterDataByDateRange(data, start, end);
 
-} else {
+}else if (Type == "frequency") {
+  data_display = frequency_data;
+}
+else {
    data_display = newPlaces_LW;
 }
 ```
 
-
-<!-- <div class="grid grid-cols-1">
-
-</div>
- -->
 
 
 

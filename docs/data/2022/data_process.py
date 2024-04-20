@@ -10,7 +10,7 @@ folder_path = '/Users/dan/DTU_PROJECT/02808 Personal/02808/docs/data/2022'
 
 
 for filename in os.listdir(folder_path):
-    if filename.endswith('.json'):  # 确保只处理 JSON 文件
+    if filename.endswith('.json'):  
         file_path = os.path.join(folder_path, filename)
         
 
