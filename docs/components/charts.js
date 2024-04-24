@@ -265,7 +265,7 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
 }
 
 // Function to count travel modes from a JSON object
-function countTravelModes(jsonData) {
+export function countTravelModes(jsonData) {
   const modeCount = {};
 
   if (jsonData.timelineObjects) {
@@ -291,7 +291,7 @@ function countTravelModes(jsonData) {
 }
 
 // Function to parse JSON and calculate distances
-function distanceTravelModes(jsonData) {
+export function distanceTravelModes(jsonData) {
     const distances = {};
 
     if (jsonData.timelineObjects) {
