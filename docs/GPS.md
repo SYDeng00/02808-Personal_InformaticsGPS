@@ -160,4 +160,3 @@ const timePeriod = view(
     ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
   </div>
 </div>
-
