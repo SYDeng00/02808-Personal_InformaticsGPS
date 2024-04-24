@@ -25,7 +25,7 @@ toc: false
 
 
 ```js
-import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAverage, calculateTotalDuration} from "./components/charts.js";
+import { visualizeGPSData, filterDataByDateRange, newPlaceChart, getDistance, isNewPlace , newPlace_lastWeek, calculateAverage, calculateTotalDuration, PlaceVisualization} from "./components/charts.js";
 
 ```
 
@@ -57,26 +57,25 @@ const Type = view(
 ```
 
 ```js
-display(duration_data);
-```
-
-```js
 var data_display = data;
 var  heatMap = view(Inputs.toggle({label: "Heat Map", value: true}));
 const newPlaces_LW = newPlace_lastWeek(data);
 const numnewPlaces_LW = newPlaces_LW.length;
 var average_count = calculateAverage(new_place_data);
 var average_duration_LW = calculateTotalDuration(newPlaces_LW);
+var data_type
 if(Type == "select"){
   data_display = filterDataByDateRange(data, start, end);
 
 }else if (Type == "frequency") {
   data_display = frequency_data;
+  var data_type = "visit_counts"
 }
 else if(Type == "last"){
    data_display = newPlaces_LW;
 } else{
   data_display = duration_data;
+  var data_type = "total_duration_hours"
 }
 ```
 
@@ -130,6 +129,14 @@ else if(Type == "last"){
 </div>
 
 
+
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => PlaceVisualization(width,data_display,data_type))}
+  </div>
+</div>
+
 ```js
 const timePeriod = view(
   Inputs.select(
@@ -141,10 +148,16 @@ const timePeriod = view(
     {value: "week", label: "Time Period"}
   )
 );
+
+
 ```
+
+# New Place Trend
+
 
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
   </div>
 </div>
+

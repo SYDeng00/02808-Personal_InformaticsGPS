@@ -198,3 +198,74 @@ export function calculateTotalDuration(data) {
 
   return totalDuration;
 }
+
+
+// export function PlaceVisualization(width, PlaceData) {
+//   const color = Plot.scale({
+//     color: {
+//       type: "categorical",
+//       domain: d3.groupSort(PlaceData, (D) => -D.length, (d) => d.location_name).filter((d) => d !== "Other"),
+//       unknown: "var(--theme-foreground-muted)"
+//     }
+//   });
+
+//   return Plot.plot({
+//     title: "New places visited in 2022 (Jan-Aug)",
+//     width,
+//     height: 300,
+//     x: {label: "Index", domain: PlaceData.map(d => d.index)},  // Set domain to include all indices
+//     y: {grid: true, label: "Visit Counts", domain: [0,400]},  // Adjust Y axis to show visit counts
+//     color: {...color, legend: true},  // Display a legend if it's useful
+//     marks: [
+//       Plot.rectY(PlaceData, {
+//         x: "index",          // Use index for the x-axis
+//         y: "visit_counts",   // Use visit_counts for the y-axis
+//         fill: "location_name",  
+//         tip: true            // Enable tooltips
+//       }),
+//       Plot.ruleY([0])        // Add a horizontal rule at y = 0
+//     ]
+//   });
+// }
+
+export function PlaceVisualization(width, PlaceData, yAxisField) {
+  var max_value = 400
+  if (yAxisField == "visit_counts"){
+    PlaceData.forEach(d => {
+      d.visit_counts = +d.visit_counts; // '+' 前缀将字符串转换为数字
+      max_value = d3.max(PlaceData, d => d.visit_counts);
+    });
+  }else {
+    PlaceData.forEach(d => {
+      d.total_duration_hours = +d.total_duration_hours; // '+' 前缀将字符串转换为数字
+      max_value = d3.max(PlaceData, d => d.total_duration_hours);
+    });
+  }
+  
+
+  const color = Plot.scale({
+    color: {
+      type: "categorical",
+      domain: d3.groupSort(PlaceData, (D) => -D.length, (d) => d.location_name).filter((d) => d !== "Other"),
+      unknown: "var(--theme-foreground-muted)"
+    }
+  });
+
+  return Plot.plot({
+    title: "Rank",
+    width,
+    height: 300,
+    x: {label: "Index", domain: PlaceData.map(d => d.index)},  // Set domain to include all indices
+    y: {grid: true, label: "Visit Counts", domain: [0,max_value]},  // Adjust Y axis to show visit counts
+    color: {...color, legend: true},  // Display a legend if it's useful
+    marks: [
+      Plot.rectY(PlaceData, {
+        x: "index",          // Use index for the x-axis
+        y: yAxisField,   // Use visit_counts for the y-axis
+        fill: "location_name",  
+        tip: true            // Enable tooltips
+      }),
+      Plot.ruleY([0])        // Add a horizontal rule at y = 0
+    ]
+  });
+}

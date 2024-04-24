@@ -11,7 +11,7 @@ def latlon_to_utm(lat, lon):
 df = pd.read_csv('/Users/dan/DTU_PROJECT/02808 Personal/02808/docs/data/combined_data.csv')
 
 # Convert latitude and longitude to UTM coordinates and round to the nearest 50 meters
-df['utm_x'], df['utm_y'] = zip(*df.apply(lambda row: latlon_to_utm(row['Latitude'], row['Longitude']), axis=1))
+df['utm_x'], df['utm_y'] = zip(*df.apply(lambda row: latlon_to_utm(row['latitude'], row['longitude']), axis=1))
 df['utm_x_rounded'] = (df['utm_x'] / 50).round() * 50
 df['utm_y_rounded'] = (df['utm_y'] / 50).round() * 50
 
@@ -31,4 +31,4 @@ result_df = result_df.sort_values(by='visit_counts', ascending=False)
 # result_df.to_csv('processed_locations.csv', index=False)
 
 # Save the top 10 processed data entries to a CSV file
-result_df.head(10).to_csv('processed_duration.csv', index=False)
+result_df.head(10).to_csv('processed_locations.csv', index=False)
