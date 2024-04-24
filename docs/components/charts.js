@@ -8,8 +8,28 @@ import * as d3 from "npm:d3";
 
 export function visualizeGPSData(data,heatMap) {
   let Places = data.map(d => {
-    return [+d['latitude'], +d['longitude']];
-  });
+
+    let startDateTime = new Date(d['start_timestamp']);
+
+
+    let locationParts = d['location_name'].split(', ');
+    let address = locationParts[0];
+    let city = locationParts[2];
+    let region = locationParts[3];
+    let postalCode = locationParts[4];
+    let country = locationParts[5];
+
+
+    let popupContent = `<b>Location:</b> ${address}<br>`;
+    popupContent += `<b>City:</b> ${city}<br>`;
+    popupContent += `<b>Area:</b> ${region}<br>`;
+    popupContent += `<b>postalCode:</b> ${postalCode}<br>`;
+    popupContent += `<b>country:</b> ${country}<br>`;
+    popupContent += `<b>startDateTime:</b> ${startDateTime.toLocaleString()}<br>`;
+
+    return [+d['latitude'], +d['longitude'], popupContent];
+});
+
 
   // Calculate the center of the map based on data points
   let xCenter = d3.mean(d3.extent(data.map(d => +d['latitude'])));
@@ -53,11 +73,13 @@ export function visualizeGPSData(data,heatMap) {
     } 
   });
 
-  // Add markers to the clustering layer
+
   Places.forEach(place => {
     var marker = L.marker(new L.LatLng(place[0], place[1]));
+    marker.bindPopup(place[2]);
     markers.addLayer(marker);
   });
+
   map.addLayer(markers);
   // Add the clustering layer to the map
   return div;
@@ -199,34 +221,6 @@ export function calculateTotalDuration(data) {
   return totalDuration;
 }
 
-
-// export function PlaceVisualization(width, PlaceData) {
-//   const color = Plot.scale({
-//     color: {
-//       type: "categorical",
-//       domain: d3.groupSort(PlaceData, (D) => -D.length, (d) => d.location_name).filter((d) => d !== "Other"),
-//       unknown: "var(--theme-foreground-muted)"
-//     }
-//   });
-
-//   return Plot.plot({
-//     title: "New places visited in 2022 (Jan-Aug)",
-//     width,
-//     height: 300,
-//     x: {label: "Index", domain: PlaceData.map(d => d.index)},  // Set domain to include all indices
-//     y: {grid: true, label: "Visit Counts", domain: [0,400]},  // Adjust Y axis to show visit counts
-//     color: {...color, legend: true},  // Display a legend if it's useful
-//     marks: [
-//       Plot.rectY(PlaceData, {
-//         x: "index",          // Use index for the x-axis
-//         y: "visit_counts",   // Use visit_counts for the y-axis
-//         fill: "location_name",  
-//         tip: true            // Enable tooltips
-//       }),
-//       Plot.ruleY([0])        // Add a horizontal rule at y = 0
-//     ]
-//   });
-// }
 
 export function PlaceVisualization(width, PlaceData, yAxisField) {
   var max_value = 400
