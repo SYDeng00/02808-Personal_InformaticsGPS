@@ -226,12 +226,12 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
   var max_value = 400
   if (yAxisField == "visit_counts"){
     PlaceData.forEach(d => {
-      d.visit_counts = +d.visit_counts; // '+' 前缀将字符串转换为数字
+      d.visit_counts = +d.visit_counts; 
       max_value = d3.max(PlaceData, d => d.visit_counts);
     });
   }else {
     PlaceData.forEach(d => {
-      d.total_duration_hours = +d.total_duration_hours; // '+' 前缀将字符串转换为数字
+      d.total_duration_hours = +d.total_duration_hours; 
       max_value = d3.max(PlaceData, d => d.total_duration_hours);
     });
   }

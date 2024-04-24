@@ -64,18 +64,22 @@ const numnewPlaces_LW = newPlaces_LW.length;
 var average_count = calculateAverage(new_place_data);
 var average_duration_LW = calculateTotalDuration(newPlaces_LW);
 var data_type
+var shouldDisplay
 if(Type == "select"){
   data_display = filterDataByDateRange(data, start, end);
 
 }else if (Type == "frequency") {
   data_display = frequency_data;
   var data_type = "visit_counts"
+  shouldDisplay = true;
+  
 }
 else if(Type == "last"){
    data_display = newPlaces_LW;
 } else{
   data_display = duration_data;
   var data_type = "total_duration_hours"
+  shouldDisplay = true;
 }
 ```
 
@@ -131,10 +135,13 @@ else if(Type == "last"){
 
 
 
-<div class="grid grid-cols-1">
+<!-- <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => PlaceVisualization(width,data_display,data_type))}
   </div>
+</div> -->
+<div class="grid grid-cols-1">
+  ${shouldDisplay ? html`<div class="card">${resize((width) => PlaceVisualization(width,data_display,data_type))}</div>` : ''}
 </div>
 
 ```js
