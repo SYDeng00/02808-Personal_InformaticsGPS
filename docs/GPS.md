@@ -134,7 +134,6 @@ else if(Type == "last"){
 const timePeriod = view(
   Inputs.select(
     new Map([
-      ["Year", "year"],
       ["Month", "month"],
       ["Week", "week"],
       ["Day", "day"]
