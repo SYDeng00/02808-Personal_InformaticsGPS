@@ -45,12 +45,12 @@ const end = view(Inputs.date({label: "End", value: "2022-07-21"}));
 const Type = view(
   Inputs.select(
     new Map([
-      ["Select Data visualization", "select"],
-      ["Last Week visualization", "last"],
-      ["Most visited 10 places", "frequency"],
-      ["Most duration 10 places", "duration"]
+      ["Between selected dates", "select"],
+      ["Last 7 days", "last"],
+      ["Top 10 places", "frequency"],
+      ["Top 10 time spent", "duration"]
     ]),
-    {value: "select", label: "Time Period"}
+    {value: "select", label: "Visualization"}
   )
 );
 
@@ -93,35 +93,37 @@ else if(Type == "last"){
 
   <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
     <div style="flex: 1; text-align: center;">
-      <h2>New places visited last week</h2>
+      <h2>New places for last 7 days</h2>
       <span class="big">${numnewPlaces_LW.toLocaleString("en-US")}</span>
     </div>
     <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
     <div style="flex: 1; text-align: center;">
-      <h2>Average new places visited per week</h2>
+      <h2>Average new places per week</h2>
       <span class="big">${average_count.averagePerWeek.toLocaleString("en-US")}</span>
     </div>
   </div>
   <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
     <div style="flex: 1; text-align: center;">
-      <h2>Time spent in new places last week (Hour)</h2>
-      <span class="big">${average_duration_LW.toLocaleString("en-US")}</span>
-      </div>
-      <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
-      <div style="flex: 1; text-align: center;">
-      <h2>Average time spent in new places per week</h2>
-      <span class="big">${average_count.average_durationPerWeek.toLocaleString("en-US")}</span>
-    </div>
-  </div>
-  <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-    <div style="flex: 1; text-align: center;">
-      <h2>Average time spent in new places per month</h2>
-      <span class="big">${average_count.average_durationPerMonth.toLocaleString("en-US")}</span>
+      <h2>Average new places per month</h2>
+      <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
     </div>
     <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
     <div style="flex: 1; text-align: center;">
-      <h2>Average new places visited per month</h2>
-      <span class="big">${average_count.averagePerMonth.toLocaleString("en-US")}</span>
+      <h2>Time spent in new places last 7 days</h2>
+      <span class="big">${average_duration_LW.toLocaleString("en-US")} h</span>
+      </div>
+
+
+  </div>
+  <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="flex: 1; text-align: center;">
+      <h2>Average time spent in new places per week</h2>
+      <span class="big">${average_count.average_durationPerWeek.toLocaleString("en-US")} h</span>
+    </div>
+    <div style="border-left: 1px solid #ccc; height: 100%; margin: 0 20px;"></div> 
+    <div style="flex: 1; text-align: center;">
+      <h2>Average time spent in new places per month</h2>
+      <span class="big">${average_count.average_durationPerMonth.toLocaleString("en-US")} h</span>
     </div>
   </div>
 
