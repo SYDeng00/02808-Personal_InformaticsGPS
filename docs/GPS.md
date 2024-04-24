@@ -161,7 +161,9 @@ const timePeriod = view(
 
 # New Place Trend
 
-
+```js
+// const bandwidth = view(Inputs.range([1, 20], {value: 7, step: 0.1, label: "Bandwidth"}))
+```
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}

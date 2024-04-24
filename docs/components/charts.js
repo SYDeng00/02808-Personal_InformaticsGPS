@@ -5,7 +5,6 @@ import "npm:leaflet.heat";
 import * as d3 from "npm:d3";
 
 
-
 export function visualizeGPSData(data,heatMap) {
   let Places = data.map(d => {
 
@@ -103,11 +102,33 @@ export function filterDataByDateRange(data, startDate, endDate) {
   return filteredData;
 }
 
-export function newPlaceChart(width,newPlaceData,timePeriod) {
+// export function newPlaceChart(width,newPlaceData,timePeriod) {
+//   const color = Plot.scale({
+//     color: {
+//       type: "categorical",
+//       domain: d3.groupSort(newPlaceData, (D) => -D.length, (d) => d.state).filter((d) => d !== "Other"),
+//       unknown: "var(--theme-foreground-muted)"
+//     }
+//   });
+
+//   return Plot.plot({
+//     title: "New places visited in 2022 (Jan-Aug)",
+//     width,
+//     height: 300 ,
+//     y: {grid: true, label: "Places"},
+//     color: {...color, legend: false},
+//     marks: [
+//       Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: timePeriod, tip: true})),
+//       Plot.ruleY([0])
+//     ]
+//   });
+// }
+
+export function newPlaceChart(width, newPlaceData, timePeriod) {
   const color = Plot.scale({
     color: {
       type: "categorical",
-      domain: d3.groupSort(newPlaceData, (D) => -D.length, (d) => d.state).filter((d) => d !== "Other"),
+      domain: d3.groupSort(newPlaceData, D => -D.length, d => d.state).filter(d => d !== "Other"),
       unknown: "var(--theme-foreground-muted)"
     }
   });
@@ -115,15 +136,19 @@ export function newPlaceChart(width,newPlaceData,timePeriod) {
   return Plot.plot({
     title: "New places visited in 2022 (Jan-Aug)",
     width,
-    height: 300 ,
-    y: {grid: true, label: "Places"},
-    color: {...color, legend: false},
+    height: 300,
+    y: { grid: true, label: "Places" },
+    color: { ...color, legend: false },
     marks: [
-      Plot.rectY(newPlaceData, Plot.binX({y: "count"}, {x: "date", fill: "state", interval: timePeriod, tip: true})),
-      Plot.ruleY([0])
+      Plot.rectY(newPlaceData, Plot.binX({ y: "count" }, { x: "date", fill: "state", interval: timePeriod, tip: true })),
+      Plot.ruleY([0]),
+      Plot.line(newPlaceData, Plot.binX({ y: "count" }, { x: "date", interval: timePeriod }), { stroke: "state", curve: "monotoneX" })
+
     ]
   });
 }
+
+
 
 export function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371e3; 
@@ -250,7 +275,7 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
     width,
     height: 300,
     x: {label: "Index", domain: PlaceData.map(d => d.index)},  // Set domain to include all indices
-    y: {grid: true, label: "Visit Counts", domain: [0,max_value]},  // Adjust Y axis to show visit counts
+    y: {grid: true, label: "value", domain: [0,max_value]},  // Adjust Y axis to show visit counts
     color: {...color, legend: true},  // Display a legend if it's useful
     marks: [
       Plot.rectY(PlaceData, {
