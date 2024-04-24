@@ -263,3 +263,58 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
     ]
   });
 }
+
+// Function to count travel modes from a JSON object
+function countTravelModes(jsonData) {
+  const modeCount = {};
+
+  if (jsonData.timelineObjects) {
+      jsonData.timelineObjects.forEach(object => {
+          if (object.activitySegment && object.activitySegment.waypointPath) {
+              const { travelMode } = object.activitySegment.waypointPath;
+              if (travelMode) {
+                  // Increment count for each travel mode
+                  modeCount[travelMode] = (modeCount[travelMode] || 0) + 1;
+              }
+          }
+      });
+  }
+
+  // Calculate total count
+  const totalCount = Object.values(modeCount).reduce((acc, curr) => acc + curr, 0);
+
+  // Print the counts
+  for (const mode in modeCount) {
+      const percentage = ((modeCount[mode] / totalCount) * 100).toFixed(2);
+      console.log(`${mode}: ${modeCount[mode]} occurrences, ${percentage}% of total occurrences`);
+  }
+}
+
+// Function to parse JSON and calculate distances
+function distanceTravelModes(jsonData) {
+    const distances = {};
+
+    if (jsonData.timelineObjects) {
+        jsonData.timelineObjects.forEach(object => {
+            if (object.activitySegment && object.activitySegment.waypointPath) {
+                const { travelMode, distanceMeters } = object.activitySegment.waypointPath;
+                if (travelMode && distanceMeters) {
+                    // Accumulate distances for each travel mode
+                    if (!distances[travelMode]) {
+                        distances[travelMode] = 0;
+                    }
+                    distances[travelMode] += distanceMeters;
+                }
+            }
+        });
+    }
+
+    // Calculate total distance
+    const totalDistance = Object.values(distances).reduce((acc, curr) => acc + curr, 0);
+
+    // Calculate and print the percentage of each mode
+    for (const mode in distances) {
+        const percentage = ((distances[mode] / totalDistance) * 100).toFixed(2);
+        console.log(`${mode}: ${distances[mode]} meters, ${percentage}% of total distances`);
+    }
+}
