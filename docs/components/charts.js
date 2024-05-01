@@ -21,8 +21,8 @@ export function visualizeGPSData(data,heatMap) {
 
     let popupContent = `${address}<br>`;
     popupContent += `${city}<br>`;
-    popupContent += ` ${region}<br>`;
-    popupContent += ` ${postalCode}<br>`;
+    popupContent += `${region}<br>`;
+    popupContent += `${postalCode}<br>`;
     popupContent += `${country}<br>`;
     popupContent += `${startDateTime.toLocaleString()}<br>`;
 
@@ -251,7 +251,7 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
   var max_value = 400
   var data_type 
   if (yAxisField == "visit_counts"){
-    data_type = "Frequency "
+    data_type = "Visits"
     PlaceData.forEach(d => {
       d.visit_counts = +d.visit_counts; 
       max_value = d3.max(PlaceData, d => d.visit_counts);
