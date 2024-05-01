@@ -1,6 +1,6 @@
 # Hello Framework
 
-This is an [Observable Framework](https://observablehq.com/framework) project. To start the local preview server, run:
+This is an [Observable Framework](https://observablehq.com/framework) project. To start the local preview server, run this in the project folder:
 
 ```
 npm run dev

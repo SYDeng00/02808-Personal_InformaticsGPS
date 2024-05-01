@@ -37,9 +37,6 @@ const new_place_data = await FileAttachment("./data/new_places.csv").csv();
 const  frequency_data = await FileAttachment("./data/processed_locations.csv").csv();
 const  duration_data = await FileAttachment("./data/processed_duration.csv").csv();
 
-
-
-
 const start = view(Inputs.date({label: "Start", value: "2022-06-21"}));
 const end = view(Inputs.date({label: "End", value: "2022-07-21"}));
 const Type = view(
@@ -83,11 +80,6 @@ else if(Type == "last"){
 }
 ```
 
-
-
-
-
-    
 
 <div class="grid grid-cols-3">
   <div class="card grid-colspan-2 grid-rowspan-3">
@@ -133,13 +125,6 @@ else if(Type == "last"){
 </div>
 
 
-
-
-<!-- <div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => PlaceVisualization(width,data_display,data_type))}
-  </div>
-</div> -->
 <div class="grid grid-cols-1">
   ${shouldDisplay ? html`<div class="card">${resize((width) => PlaceVisualization(width,data_display,data_type))}</div>` : ''}
 </div>
@@ -161,9 +146,6 @@ const timePeriod = view(
 
 # New Place Trend
 
-```js
-// const bandwidth = view(Inputs.range([1, 20], {value: 7, step: 0.1, label: "Bandwidth"}))
-```
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => newPlaceChart(width,new_place_data,timePeriod))}
