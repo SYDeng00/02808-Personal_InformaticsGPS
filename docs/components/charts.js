@@ -19,12 +19,12 @@ export function visualizeGPSData(data,heatMap) {
     let country = locationParts[5];
 
 
-    let popupContent = `<b>Location:</b> ${address}<br>`;
-    popupContent += `<b>City:</b> ${city}<br>`;
-    popupContent += `<b>Area:</b> ${region}<br>`;
-    popupContent += `<b>postalCode:</b> ${postalCode}<br>`;
-    popupContent += `<b>country:</b> ${country}<br>`;
-    popupContent += `<b>startDateTime:</b> ${startDateTime.toLocaleString()}<br>`;
+    let popupContent = `${address}<br>`;
+    popupContent += `${city}<br>`;
+    popupContent += ` ${region}<br>`;
+    popupContent += ` ${postalCode}<br>`;
+    popupContent += `${country}<br>`;
+    popupContent += `${startDateTime.toLocaleString()}<br>`;
 
     return [+d['latitude'], +d['longitude'], popupContent];
 });
@@ -249,12 +249,15 @@ export function calculateTotalDuration(data) {
 
 export function PlaceVisualization(width, PlaceData, yAxisField) {
   var max_value = 400
+  var data_type 
   if (yAxisField == "visit_counts"){
+    data_type = "Frequency "
     PlaceData.forEach(d => {
       d.visit_counts = +d.visit_counts; 
       max_value = d3.max(PlaceData, d => d.visit_counts);
     });
   }else {
+    data_type = "Hour"
     PlaceData.forEach(d => {
       d.total_duration_hours = +d.total_duration_hours; 
       max_value = d3.max(PlaceData, d => d.total_duration_hours);
@@ -275,7 +278,7 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
     width,
     height: 300,
     x: {label: "Index", domain: PlaceData.map(d => d.index)},  // Set domain to include all indices
-    y: {grid: true, label: "value", domain: [0,max_value]},  // Adjust Y axis to show visit counts
+    y: {grid: true, label: data_type, domain: [0,max_value]},  // Adjust Y axis to show visit counts
     color: {...color, legend: true},  // Display a legend if it's useful
     marks: [
       Plot.rectY(PlaceData, {
