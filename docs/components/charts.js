@@ -257,7 +257,7 @@ export function PlaceVisualization(width, PlaceData, yAxisField) {
       max_value = d3.max(PlaceData, d => d.visit_counts);
     });
   }else {
-    data_type = "Hour"
+    data_type = "Hours"
     PlaceData.forEach(d => {
       d.total_duration_hours = +d.total_duration_hours; 
       max_value = d3.max(PlaceData, d => d.total_duration_hours);
