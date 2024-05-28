@@ -9,6 +9,8 @@ Then visit <http://localhost:3000> to preview your project.
 
 For more, see <https://observablehq.com/framework/getting-started>.
 
+**The personal GPS data has been deleted for privacy, but the code for data processing is saved and can be re-poured based on data references** 
+
 ## Project structure
 
 Framework project looks like this:
